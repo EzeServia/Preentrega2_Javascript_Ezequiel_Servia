@@ -1,0 +1,11 @@
+.fondo {
+  background-image: url(../imagenes/brillo.jpg);
+}
+.img {
+  border-radius: 10px;
+  width: 150px;
+  height: 134px;
+}
+.centrar {
+  text-align: center;
+}

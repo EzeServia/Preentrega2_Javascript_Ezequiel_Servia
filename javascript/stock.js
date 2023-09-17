@@ -1,60 +1,60 @@
 // Variables globales
-const stockGlitter = [];
+const controlStock = [];
 
-const dorado020 = {
-  nombre: "Dorado-020",
-  tipo: "polvo",
-  color: "Dorado",
-  gramaje: 20,
-  peso: 100,
-  precio: 2500,
-};
-const azul040 = {
-  nombre: "Azul-040",
-  tipo: "polvo",
-  color: "Azul",
-  gramaje: 40,
-  peso: 100,
-  precio: 2500,
-};
-const rojo060 = {
-  nombre: "Rojo-060",
-  tipo: "gel",
-  color: "Rojo",
-  gramaje: 60,
-  peso: 250,
-  precio: 1000,
-};
-const holografico080 = {
-  nombre: "Holografico-080",
-  tipo: "polvo",
-  color: "Plateado Holográfico ",
-  gramaje: 80,
-  peso: 1,
+const azul020 = {
+  codigo: "A020C",
+  color: "Azul Claro",
+  gramaje: "20 mic",
   precio: 100,
+  subtotal: 100,
+  cantidad: 1,
+};
+const rojo040 = {
+  codigo: "R040",
+  color: "Rojo",
+  gramaje: "40 mic",
+  precio: 100,
+  subtotal: 100,
+  cantidad: 1,
+};
+const dorado = {
+  codigo: "D060",
+  color: "Dorado",
+  gramaje: "60 mic",
+  precio: 200,
+  subtotal: 200,
+  cantidad: 1,
+};
+const plateadoHolografico050 = {
+  codigo: "P050H",
+  color: "Plateado",
+  gramaje: "50 mic",
+  precio: 50,
+  subtotal: 50,
+  cantidad: 1,
 };
 
-stockGlitter.push(dorado020);
-stockGlitter.push(azul040);
-stockGlitter.push(rojo060);
-stockGlitter.push(holografico080);
+controlStock.push(azul020);
+controlStock.push(rojo040);
+controlStock.push(dorado);
+controlStock.push(plateadoHolografico050);
 
 // Función que se encargue de buscar si un producto existe en nuestro carrito (array)
-function enStockglitter(nombrePrompt) {
+function enStock(codigoPrompt) {
   // Find: busca un elemento que cumpla la condición (en este caso el nombre del
   // del producto con el nombre introducido en el prompt) y devuelve el elemento
   // o undefined si no lo encuentra
-  return stockGlitter.find((producto) => producto.nombre == nombrePrompt);
+  return controlStock.find((producto) => producto.codigo == codigoPrompt);
 }
 
 // Función para buscar productos
 function buscar() {
-  const keyword = prompt("indique el nombre del Glitter a buscar");
+  const keyword = prompt("¿Qué producto desea buscar?");
   // Me va a retornar un array con todos los elementos que contengan
   // la variable "keyword" (string) que lo define el usuario por el prompt
-  const arrayResultados = stockGlitter.filter((el) =>
+  const arrayResultados = controlStock.filter((el) =>
     // toLowerCase convierte un string en minúsculas
-    el.nombre.toLowerCase().includes(keyword.toLowerCase())
+    el.color.toLowerCase().includes(keyword.toLowerCase())
   );
   console.log(arrayResultados);
 }
@@ -62,71 +62,80 @@ function buscar() {
 // Función para agregar un producto al carrito
 function agregar() {
   // Pido por prompt los datos del producto
-  const tipoPrompt = prompt("indique el tipo de Glitter:/n-polvo/n-gel");
-  const nombrePrompt = prompt("Introduzca el nombre del glitter:");
-  const precioPrompt = prompt("Introduzca el precio del glitter:");
-  const gramajePrompt = prompt("¿Cuál es el gramaje del producto?");
-
+  const codigoPrompt = prompt("Introduzca el código del producto:");
+  const precioPrompt = prompt("Introduzca el Precio del paquete:");
+  const colorPrompt = prompt("Introduzca el color del brillo.");
+  const gramajePrompt = prompt("Indroduzca el gramaje del producto:");
   // Creo un objeto con los datos obtenidos del prompt
-
-  const nuevoGlitter = {
-    tipo: tipoPrompt,
-    nombre: nombrePrompt,
+  const nuevoProducto = {
+    codigo: codigoPrompt,
+    color: colorPrompt,
+    gramaje: gramajePrompt,
     precio: parseInt(precioPrompt),
-    gramaje: parseInt(gramajePrompt),
-    peso: 100,
+    subtotal: parseInt(precioPrompt),
+    cantidad: 1,
   };
 
-  const productoEncontrado = enStockglitter(nombrePrompt);
+  // Si lo encuentra, devuelve (return) el producto, sino
+  // devuelve undefined
+  const productoEncontrado = enStock(codigoPrompt);
 
   if (productoEncontrado) {
-    productoEncontrado.peso;
-    productoEncontrado.precio =
-      productoEncontrado.precio * productoEncontrado.peso;
+    productoEncontrado.cantidad++;
+    productoEncontrado.precio = parseInt(precioPrompt);
+    productoEncontrado.subtotal =
+      parseInt(precioPrompt) * productoEncontrado.cantidad;
   } else {
     // Push agrega el producto en el array
-    stockGlitter.push(nuevoGlitter);
+    controlStock.push(nuevoProducto);
   }
 
   // Mensaje de alert exitoso
-  alert("El Glitter " + nombrePrompt + " fue agregado al stock.");
+  alert(
+    "El producto " +
+      codigoPrompt +
+      " de color " +
+      colorPrompt +
+      " fue agregado al carrito."
+  );
   listar();
 }
 
 // Función para listar los productos del carrito
 function listar() {
   console.clear();
-  console.log("Productos que hay stock:");
+  console.log("Productos que hay en el STOCK:");
 
   // Recorremos los elementos del array carrito
-  stockGlitter.forEach((producto) => {
-    console.log("----------");
-    console.log("Tipo de Glitter:", producto.tipo);
-    console.log("Nombre:", producto.nombre);
-    console.log("Precio:", producto.precio);
-    console.log("Peso:", producto.peso);
-    console.log("Gramaje:", producto.gramaje);
+  controlStock.forEach((elemento) => {
+    console.log("-------------------------------------------");
+    console.log("Codigo:", elemento.codigo);
+    console.log("Color:", elemento.color);
+    console.log("Gramaje:", elemento.gramaje);
+    console.log("Precio:", elemento.precio);
+    console.log("Cantidad:", elemento.cantidad);
+    console.log("Subtotal:", elemento.subtotal);
   });
 
   // Reduce: Recorre cada elemento y va acumulando una suma de una propiedad
   // del elemento, en este caso el precio
-  const totalPesos = stockGlitter.reduce((acu, el) => acu + el.precio, 0);
-  console.log("TOTAL DEL CARRITO: $", totalPesos);
+  const totalStock = controlStock.reduce((acu, el) => acu + el.subtotal, 0);
+  console.log("TOTAL EN PESOS DE EL STOCK: $", totalStock);
 
   // Map: crea un nuevo array transformando los elementos. En este caso
   // le agregamos el IVA a los precios
-  const preciosActualizados = stockGlitter.map((producto) => {
+  const preciosActualizados = controlStock.map((producto) => {
     return {
-      nombre: producto.nombre,
+      codigo: producto.codigo,
       precio: producto.precio * 1.25,
-      cantidad: producto.peso,
+      cantidad: producto.cantidad,
     };
   });
   console.log("Precios actualizados:", preciosActualizados);
 
   // Sort: crea un nuevo array reordenando los elementos
   // En este caso de mayor a menor según el precio
-  const nuevoArrayReordenado = stockGlitter.sort((el1, el2) => {
+  const nuevoArrayReordenado = controlStock.sort((el1, el2) => {
     if (el1.precio < el2.precio) {
       return 1;
     }
@@ -140,20 +149,33 @@ function listar() {
 
 // Función para quitar un producto del carrito
 function quitar() {
-  const nombrePrompt = prompt("¿Qué producto querés quitar?");
+  const codigoPrompt = prompt("Indique el código del producto a eliminar.");
 
-  const productoEncontrado = enStockglitter(nombrePrompt);
+  const productoEncontrado = enStock(codigoPrompt);
+  /*if (productoEncontrado.cantidad > 1) {
+    productoEncontrado.cantidad--;
+    console.log("restamos 1");
+    console.log(productoEncontrado.cantidad);
+  }*/
 
   if (productoEncontrado) {
-    const indiceProducto = stockGlitter.indexOf(productoEncontrado);
+    const indiceProducto = controlStock.indexOf(productoEncontrado);
     // Una vez obtenemos el índice, lo volamos con splice
-    stockGlitter.splice(indiceProducto, 1);
+    controlStock.splice(indiceProducto, 1);
     // Mostramos un mensaje al usuario que se ha borrado el producto del carrito
     alert(
-      "El producto " + productoEncontrado.nombre + " fue borrado del carrito."
+      "El producto con código  " +
+        productoEncontrado.codigo +
+        " de color " +
+        productoEncontrado.color +
+        " fue borrado del STOCK."
     );
     listar();
   } else {
-    alert("No se encontró el producto " + nombrePrompt + " en el carrito.");
+    alert(
+      "No se encontró el producto con el codigo " +
+        codigoPrompt +
+        " en el carrito."
+    );
   }
 }

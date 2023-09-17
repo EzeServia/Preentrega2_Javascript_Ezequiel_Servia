@@ -4,30 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Control de Stock- A brillar mi Amor</title>
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
-  <body>
-    <header>
+  <body class="fondo">
+    <header class="centrar">
       <h1>A brillar mi amor</h1>
     </header>
     <main>
-      <div>
-        <h1>Glitter</h1>
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
+      <div class="centrar">
+        <h2>Control de stock Glitter</h2>
         <section>
-          <h2>Control de stock Glitter</h2>
-          <button onclick="agregar()">Agregar al carrito</button>
-          <button onclick="quitar()">Quitar del carrito</button>
+          <h3>Glitter</h3>
+          <img class="img" src="./imagenes/brillobolsas.jpg" alt="" />
+          <img class="img" src="./imagenes/brilloplata1.jpg" alt="" />
+          <img class="img" src="./imagenes/brillitos.jpg" alt="" />
+        </section>
+        <div>
+          <button onclick="agregar()">Agregar al STOCK</button>
+          <button onclick="quitar()">Quitar del STOCK</button>
           <button onclick="listar()">Listar los productos</button>
           <button onclick="buscar()">Buscar productos</button>
+        </div>
+        <section>
+          <h3>Gemas</h3>
+          <img src="" alt="" />
+          <img src="" alt="" />
+          <img src="" alt="" />
         </section>
-      </div>
-      <div>
-        <h1>Gemas</h1>
-        <img src="" alt="" />
-        <img src="" alt="" />
-        <img src="" alt="" />
       </div>
     </main>
     <script src="./javascript/stock.js"></script>
