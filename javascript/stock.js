@@ -6,8 +6,8 @@ const azul020 = {
   color: "Azul Claro",
   gramaje: "20 mic",
   precio: 100,
-  subtotal: 100,
-  cantidad: 1,
+  subtotal: 400,
+  cantidad: 4,
 };
 const rojo040 = {
   codigo: "R040",
@@ -152,30 +152,22 @@ function quitar() {
   const codigoPrompt = prompt("Indique el código del producto a eliminar.");
 
   const productoEncontrado = enStock(codigoPrompt);
-  /*if (productoEncontrado.cantidad > 1) {
-    productoEncontrado.cantidad--;
-    console.log("restamos 1");
-    console.log(productoEncontrado.cantidad);
-  }*/
 
-  if (productoEncontrado) {
+  if (productoEncontrado.cantidad > 1) {
+    productoEncontrado.cantidad--;
+    productoEncontrado.subtotal =
+      productoEncontrado.cantidad * productoEncontrado.precio;
+    alert("se redujo la cantidad del producto");
+
+    listar();
+    return;
+  }
+  if ((productoEncontrado.cantidad = 1)) {
     const indiceProducto = controlStock.indexOf(productoEncontrado);
-    // Una vez obtenemos el índice, lo volamos con splice
     controlStock.splice(indiceProducto, 1);
-    // Mostramos un mensaje al usuario que se ha borrado el producto del carrito
-    alert(
-      "El producto con código  " +
-        productoEncontrado.codigo +
-        " de color " +
-        productoEncontrado.color +
-        " fue borrado del STOCK."
-    );
+    alert("Te quedaba uno, ya se acabaron");
     listar();
   } else {
-    alert(
-      "No se encontró el producto con el codigo " +
-        codigoPrompt +
-        " en el carrito."
-    );
+    alert("No existen productos con ese código en el STOCK");
   }
 }
