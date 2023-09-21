@@ -58,46 +58,66 @@ function buscar() {
   );
   console.log(arrayResultados);
 }
-
-// Función para agregar un producto al carrito
 function agregar() {
-  // Pido por prompt los datos del producto
+  // Pido por prompt el código del producto
   const codigoPrompt = prompt("Introduzca el código del producto:");
-  const precioPrompt = prompt("Introduzca el Precio del paquete:");
-  const colorPrompt = prompt("Introduzca el color del brillo.");
-  const gramajePrompt = prompt("Indroduzca el gramaje del producto:");
-  // Creo un objeto con los datos obtenidos del prompt
-  const nuevoProducto = {
-    codigo: codigoPrompt,
-    color: colorPrompt,
-    gramaje: gramajePrompt,
-    precio: parseInt(precioPrompt),
-    subtotal: parseInt(precioPrompt),
-    cantidad: 1,
-  };
+  const valorEnMayusculas = codigoPrompt.toUpperCase();
 
-  // Si lo encuentra, devuelve (return) el producto, sino
-  // devuelve undefined
-  const productoEncontrado = enStock(codigoPrompt);
+  // Busco si el producto ya existe en el stock
+  const productoExistente = enStock(valorEnMayusculas);
 
-  if (productoEncontrado) {
-    productoEncontrado.cantidad++;
-    productoEncontrado.precio = parseInt(precioPrompt);
-    productoEncontrado.subtotal =
-      parseInt(precioPrompt) * productoEncontrado.cantidad;
+  if (productoExistente) {
+    // Si el producto existe, pido el precio actualizado
+    const precioPrompt = prompt("Introduzca el precio actualizado:");
+    const precioActualizado = parseFloat(precioPrompt);
+
+    if (!isNaN(precioActualizado)) {
+      // Pido la cantidad a agregar
+      const cantidadPrompt = prompt("Introduzca la cantidad a agregar:");
+      const cantidad = parseInt(cantidadPrompt);
+
+      if (!isNaN(cantidad)) {
+        // Actualizo el precio y la cantidad
+        productoExistente.precio = precioActualizado;
+        productoExistente.cantidad += cantidad;
+        productoExistente.subtotal =
+          productoExistente.cantidad * precioActualizado;
+        alert("Producto actualizado en el stock.");
+      } else {
+        alert("Por favor, ingrese una cantidad válida.");
+      }
+    } else {
+      alert("Por favor, ingrese un precio válido.");
+    }
   } else {
-    // Push agrega el producto en el array
-    controlStock.push(nuevoProducto);
-  }
+    // Si el producto no existe, pido las variables adicionales
+    const colorPrompt = prompt("Introduzca el color del brillo:");
+    const gramajePrompt = prompt("Introduzca el gramaje del producto:");
+    const precioPrompt = prompt("Introduzca el precio del producto:");
+    const cantidadPrompt = prompt("Introduzca la cantidad a agregar:");
 
-  // Mensaje de alert exitoso
-  alert(
-    "El producto " +
-      codigoPrompt +
-      " de color " +
-      colorPrompt +
-      " fue agregado al carrito."
-  );
+    const precio = parseFloat(precioPrompt);
+    const gramaje = parseFloat(gramajePrompt);
+    const cantidad = parseInt(cantidadPrompt);
+
+    if (!isNaN(precio) && !isNaN(gramaje) && !isNaN(cantidad)) {
+      const nuevoProducto = {
+        codigo: codigoPrompt,
+        color: colorPrompt,
+        gramaje: gramaje,
+        precio: precio,
+        subtotal: precio * cantidad,
+        cantidad: cantidad,
+      };
+      // Agrego el nuevo producto al stock
+      controlStock.push(nuevoProducto);
+      alert("Producto agregado al stock.");
+    } else {
+      alert(
+        "Por favor, ingrese valores numéricos válidos para el precio, gramaje y cantidad."
+      );
+    }
+  }
   listar();
 }
 
@@ -147,25 +167,48 @@ function listar() {
   console.log("Nuevo array reordenado:", nuevoArrayReordenado);
 }
 
-// Función para quitar un producto del carrito
 function quitar() {
   const codigoPrompt = prompt("Indique el código del producto a eliminar.");
+  const valorEnMayusculas = codigoPrompt.toUpperCase();
 
-  const productoEncontrado = enStock(codigoPrompt);
+  const productoEncontrado = enStock(valorEnMayusculas);
 
-  if (productoEncontrado.cantidad > 1) {
-    productoEncontrado.cantidad--;
-    productoEncontrado.subtotal =
-      productoEncontrado.cantidad * productoEncontrado.precio;
-    alert("se redujo la cantidad del producto");
+  if (productoEncontrado) {
+    // Muestra el color y la cantidad del producto en el stock
+    alert(
+      "El producto se encuentra en el STOCK, es de color " +
+        productoEncontrado.color +
+        "y hay almacenados " +
+        productoEncontrado.cantidad +
+        " unidades."
+    );
 
-    listar();
-    return;
-  }
-  if ((productoEncontrado.cantidad = 1)) {
-    const indiceProducto = controlStock.indexOf(productoEncontrado);
-    controlStock.splice(indiceProducto, 1);
-    alert("Te quedaba uno, ya se acabaron");
+    // Pide la cantidad que deseas eliminar
+    const cantidadEliminarPrompt = prompt(
+      "Ingrese la cantidad que desea eliminar"
+    );
+    const cantidadEliminar = parseInt(cantidadEliminarPrompt);
+
+    if (
+      !isNaN(cantidadEliminar) &&
+      cantidadEliminar > 0 &&
+      cantidadEliminar <= productoEncontrado.cantidad
+    ) {
+      if (productoEncontrado.cantidad > 1) {
+        productoEncontrado.cantidad -= cantidadEliminar;
+        productoEncontrado.subtotal =
+          productoEncontrado.cantidad * productoEncontrado.precio;
+        alert(`Se han eliminado ${cantidadEliminar} unidades del producto.`);
+      } else {
+        const indiceProducto = controlStock.indexOf(productoEncontrado);
+        controlStock.splice(indiceProducto, 1);
+        alert("Te quedaba uno, ya se acabaron");
+      }
+    } else {
+      alert(
+        "La cantidad ingresada no es válida o excede la cantidad en stock."
+      );
+    }
     listar();
   } else {
     alert("No existen productos con ese código en el STOCK");
