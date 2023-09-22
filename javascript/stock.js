@@ -1,4 +1,4 @@
-// Variables globales
+//Array creado "ControlStock"
 const controlStock = [];
 
 const azul020 = {
@@ -33,7 +33,7 @@ const plateadoHolografico050 = {
   subtotal: 50,
   cantidad: 1,
 };
-
+//guardo los objetos en el array.
 controlStock.push(azul020);
 controlStock.push(rojo040);
 controlStock.push(dorado);
