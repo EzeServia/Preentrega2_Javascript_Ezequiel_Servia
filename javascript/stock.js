@@ -39,28 +39,28 @@ controlStock.push(rojo040);
 controlStock.push(dorado);
 controlStock.push(plateadoHolografico050);
 
-// Función que se encargue de buscar si un producto existe en nuestro carrito (array)
+// Función que se encargue de buscar si un producto existe en STOCK.
 function enStock(codigoPrompt) {
-  // Find: busca un elemento que cumpla la condición (en este caso el nombre del
-  // del producto con el nombre introducido en el prompt) y devuelve el elemento
-  // o undefined si no lo encuentra
+  // Find: para buscar si encuentra el código ingresado en el prompt en el stock.
   return controlStock.find((producto) => producto.codigo == codigoPrompt);
 }
 
 // Función para buscar productos
 function buscar() {
   const keyword = prompt("¿Qué producto desea buscar?");
-  // Me va a retornar un array con todos los elementos que contengan
-  // la variable "keyword" (string) que lo define el usuario por el prompt
+  /* Me retorna un array con todos los elementos que contengan
+  la variable "keyword" (string) que lo define el usuario por el prompt*/
   const arrayResultados = controlStock.filter((el) =>
-    // toLowerCase convierte un string en minúsculas
+    // uso toLowerCase para convertirlo en minúsculas
     el.color.toLowerCase().includes(keyword.toLowerCase())
   );
   console.log(arrayResultados);
 }
+//Función para agregar un producto al Stock.
 function agregar() {
   // Pido por prompt el código del producto
   const codigoPrompt = prompt("Introduzca el código del producto:");
+  //
   const valorEnMayusculas = codigoPrompt.toUpperCase();
 
   // Busco si el producto ya existe en el stock
@@ -69,14 +69,15 @@ function agregar() {
   if (productoExistente) {
     // Si el producto existe, pido el precio actualizado
     const precioPrompt = prompt("Introduzca el precio actualizado:");
+
     const precioActualizado = parseFloat(precioPrompt);
 
-    if (!isNaN(precioActualizado)) {
-      // Pido la cantidad a agregar
+    if (precioActualizado) {
+      // si el precio se actualiza, Pido la cantidad a agregar..
       const cantidadPrompt = prompt("Introduzca la cantidad a agregar:");
       const cantidad = parseInt(cantidadPrompt);
 
-      if (!isNaN(cantidad)) {
+      if (cantidad) {
         // Actualizo el precio y la cantidad
         productoExistente.precio = precioActualizado;
         productoExistente.cantidad += cantidad;
@@ -111,7 +112,7 @@ function agregar() {
       };
       // Agrego el nuevo producto al stock
       controlStock.push(nuevoProducto);
-      alert("Producto agregado al stock.");
+      alert("El Producto fue agregado al stock.");
     } else {
       alert(
         "Por favor, ingrese valores numéricos válidos para el precio, gramaje y cantidad."
@@ -121,14 +122,14 @@ function agregar() {
   listar();
 }
 
-// Función para listar los productos del carrito
+// Función para listar los productos del STOCK.
 function listar() {
   console.clear();
   console.log("Productos que hay en el STOCK:");
 
-  // Recorremos los elementos del array carrito
+  // Recorremos los elementos del STOCK.
   controlStock.forEach((elemento) => {
-    console.log("-------------------------------------------");
+    console.log("-----------------------------------------------------");
     console.log("Codigo:", elemento.codigo);
     console.log("Color:", elemento.color);
     console.log("Gramaje:", elemento.gramaje);
@@ -140,45 +141,34 @@ function listar() {
   // Reduce: Recorre cada elemento y va acumulando una suma de una propiedad
   // del elemento, en este caso el precio
   const totalStock = controlStock.reduce((acu, el) => acu + el.subtotal, 0);
-  console.log("TOTAL EN PESOS DE EL STOCK: $", totalStock);
+  console.log("TOTAL EN PESOS DEL STOCK: $", totalStock);
 
   // Map: crea un nuevo array transformando los elementos. En este caso
-  // le agregamos el IVA a los precios
+  // le agregamos el % de la lista de precios que queramos tener para esos productos.
   const preciosActualizados = controlStock.map((producto) => {
     return {
       codigo: producto.codigo,
-      precio: producto.precio * 1.25,
+      precio: producto.precio * 1.45,
       cantidad: producto.cantidad,
     };
   });
-  console.log("Precios actualizados:", preciosActualizados);
-
-  // Sort: crea un nuevo array reordenando los elementos
-  // En este caso de mayor a menor según el precio
-  const nuevoArrayReordenado = controlStock.sort((el1, el2) => {
-    if (el1.precio < el2.precio) {
-      return 1;
-    }
-    if (el1.precio > el2.precio) {
-      return -1;
-    }
-    return 0;
-  });
-  console.log("Nuevo array reordenado:", nuevoArrayReordenado);
+  console.log("Lista con precios +45%:", preciosActualizados);
 }
-
+// Función para eliminar un producto del STOCK.
 function quitar() {
+  //Pedimos el codigo del producto a eliminar.
+  //Como los codigos me gustan más en mayúsculas le puse el toUppercase para que reconozca
+  //los productos guardados desde el inicio.
   const codigoPrompt = prompt("Indique el código del producto a eliminar.");
   const valorEnMayusculas = codigoPrompt.toUpperCase();
 
   const productoEncontrado = enStock(valorEnMayusculas);
-
   if (productoEncontrado) {
-    // Muestra el color y la cantidad del producto en el stock
+    // si encuentra el producto en el stock Muestra el color y la cantidad
     alert(
       "El producto se encuentra en el STOCK, es de color " +
         productoEncontrado.color +
-        "y hay almacenados " +
+        " y hay almacenados " +
         productoEncontrado.cantidad +
         " unidades."
     );
@@ -188,21 +178,24 @@ function quitar() {
       "Ingrese la cantidad que desea eliminar"
     );
     const cantidadEliminar = parseInt(cantidadEliminarPrompt);
-
+    //verifica que la cantidad a eliminar sea mayor que cero y menor o igual que la cantidad almacenada de producto.
     if (
       !isNaN(cantidadEliminar) &&
       cantidadEliminar > 0 &&
       cantidadEliminar <= productoEncontrado.cantidad
     ) {
-      if (productoEncontrado.cantidad > 1) {
+      //si la cantidad a eliminar es igual a la cantidad almacenada borra el producto,
+      //si es menor, pero mayor que 0, le quita esa cantidad y actualiza las variables.
+      // si queres borrar más cantidad de la que hay no te lo permite.
+      if (cantidadEliminar === productoEncontrado.cantidad) {
+        const indiceProducto = controlStock.indexOf(productoEncontrado);
+        controlStock.splice(indiceProducto, 1);
+        alert("El producto fue eliminado.");
+      } else if (productoEncontrado.cantidad > 1) {
         productoEncontrado.cantidad -= cantidadEliminar;
         productoEncontrado.subtotal =
           productoEncontrado.cantidad * productoEncontrado.precio;
         alert(`Se han eliminado ${cantidadEliminar} unidades del producto.`);
-      } else {
-        const indiceProducto = controlStock.indexOf(productoEncontrado);
-        controlStock.splice(indiceProducto, 1);
-        alert("Te quedaba uno, ya se acabaron");
       }
     } else {
       alert(

@@ -1,6 +1,9 @@
 .fondo {
   background-image: url(../imagenes/brillo.jpg);
 }
+.titulo {
+  text-shadow: 0px 0px 20px white;
+}
 .img {
   border-radius: 10px;
   width: 150px;
@@ -8,4 +11,23 @@
 }
 .centrar {
   text-align: center;
+}
+.boton {
+  background-color: black;
+  color: violet;
+  border: 2px solid white;
+  box-shadow: 0px 0px 10px white;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.boton:hover {
+  background-color: violet;
+  color: black;
+  border-color: violet;
+  box-shadow: 0px 0px 15px violet;
+  transform: scale(1.1);
+}
+.margen {
+  margin: 30px;
 }
